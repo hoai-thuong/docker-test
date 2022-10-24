@@ -1,0 +1,27 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dockerapp
+    container_name: app
+    restart: unless-stopped
+    volumes:
+        - ./:/var/www
+
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile_Nginix
+    image: nginx
+    container_name: webserver
+    restart: unless-stopped
+    ports:
+      - "8082:80"
+    volumes:
+      - ./:/var/www
+      - ./config/nginx/:/etc/nginx/conf.d/
+    depends_on:
+      - app
+
